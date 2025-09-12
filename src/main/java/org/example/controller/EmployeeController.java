@@ -1,7 +1,10 @@
 package org.example.controller;
 
 import org.example.entity.Employee;
+import org.example.repository.EmployeeRepository;
 import org.example.service.EmployeeService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

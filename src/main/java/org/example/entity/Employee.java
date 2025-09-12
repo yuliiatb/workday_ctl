@@ -19,10 +19,12 @@ public class Employee {
     private String employeePassword;
     @Column(name = "employee_role")
     private String employeeRole;
-
     @ManyToOne
     @JoinColumn(name = "schedule_id")
     private Schedule scheduleId;
+
+    public Employee() {
+    }
 
     public Employee(Long employeeId, String employeeFirstName, String employeeLastName, String employeeUserName, String employeePassword, String employeeRole, Schedule scheduleId) {
         this.employeeId = employeeId;
@@ -32,9 +34,6 @@ public class Employee {
         this.employeePassword = employeePassword;
         this.employeeRole = employeeRole;
         this.scheduleId = scheduleId;
-    }
-
-    public Employee() {
     }
 
     public Long getEmployeeId() {
@@ -85,11 +84,11 @@ public class Employee {
         this.employeeRole = employeeRole;
     }
 
-    public Schedule getSchedule() {
+    public Schedule getScheduleId() {
         return scheduleId;
     }
 
-    public void setSchedule(Schedule scheduleId) {
-        this.scheduleId = scheduleId;
+    public void setSchedule(Schedule schedule) {
+        this.scheduleId = schedule;
     }
 }
