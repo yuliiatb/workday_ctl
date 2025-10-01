@@ -28,17 +28,6 @@ public class WorkLog {
     @Column(name = "break_end")
     private LocalTime breakEnd;
 
-    /*
-    //TODO lo de calcular - luego poner logica?
-    @Column(name = "overtime")
-    private Double overtime;
-    @Column(name = "hours_worked")
-    private Double hoursWorked;
-    @Column(name = "hours_remaining")
-    private Double hoursRemaining;
-
-     */
-
     public WorkLog(Long workLogId, Employee employee, LocalDate workDate, LocalTime logStartTime, LocalTime logEndTime, LocalTime breakStart, LocalTime breakEnd) {
         this.workLogId = workLogId;
         this.employee = employee;

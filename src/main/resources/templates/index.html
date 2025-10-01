@@ -1,246 +1,112 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="es">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>workday_ctl</title>
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
 
-    h1 {
-        text-align: center;
-    }
+  <link rel="stylesheet" href="/css/style.css">
 
-    .search-container {
-        margin: 20px 0;
-    }
-
-    input[type="text"] {
-        padding: 5px;
-        width: 300px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 30px;
-    }
-
-    table, th, td {
-        border: 1px solid #aaa;
-    }
-
-    th, td {
-        padding: 8px;
-        text-align: left;
-    }
-
-    tr:hover {
-        background-color: #f2f2f2;
-        cursor: pointer;
-    }
-
-    .profile-container {
-        border: 1px solid #aaa;
-        padding: 15px;
-        margin-bottom: 30px;
-    }
-
-    .profile-container h2 {
-        margin-top: 0;
-    }
-
-    .worklog-table {
-        max-height: 200px;
-        overflow-y: scroll;
-        display: block;
-    }
-
-    .worklog-table table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .report-table {
-        margin-top: 20px;
-    }
-
-    button {
-        padding: 5px 10px;
-        margin-left: 5px;
-    }
-
-    .report-popup {
-        display: none;
-        position: fixed;
-        top: 30%;
-        left: 40%;
-        background-color: #fff;
-        border: 1px solid #aaa;
-        padding: 20px;
-        z-index: 1000;
-    }
-
-    .report-popup label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.5);
-        z-index: 900;
-    }
-  </style>
 </head>
+
 <body>
+  <header id="header">
+    <div class="logo-block">
+      <img id="header-img" src="/images/logo.png" alt="workday_ctrl logo" />
+      <h1>workday_ctrl</h1>
+    </div>
+    <div class="menu">
+      <nav id="nav-bar">
+        <ul class="list-menu">
+          <li><a class="nav-link">Ayuda</a></li> <!-- TODO crear un manual para admin y user-->
+          <li><button class="btn-login" onclick="window.location.href='/login'">Iniciar sesión</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-<h1>workday_ctrl</h1>
+  <main class="content">
+    <div class="search-container">
+      <label for="search">Buscar:</label>
+      <input type="text" id="search" placeholder="Nombre, Apellido, ID, Nombre de usuario, Rol">
+      <button id="search-button">➡️</button>
+    </div>
 
-<div class="search-container">
-  <label for="search">Buscar:</label>
-  <input type="text" id="search" placeholder="Nombre, Apellido, ID, Nombre de usuario, Rol">
-  <button id="search-button">➡️</button>
-</div>
-
-<table id="employee-table">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Nombre</th>
-    <th>Apellidos</th>
-    <th>Rol</th>
-  </tr>
-  </thead>
-  <tbody id="employee-tbody">
-    <!-- Cargar los datos utilizando JavaScript -->
-  </tbody>
-</table>
-
-<script>
-  fetch('/employee')
-    .then(response => response.json())
-    .then(employees => {
-      const tbody = document.getElementById('employee-tbody');
-      employees.forEach(employee => {
-        const row = `
-          <tr>
-            <td>${employee.employeeId}</td>
-            <td>${employee.employeeFirstName}</td>
-            <td>${employee.employeeLastName}</td>
-            <td>${employee.employeeRole}</td>
-          </tr>
-        `;
-        tbody.innerHTML += row;
-      });
-    });
-</script>
-
-<div class="profile-container" id="profile">
-  <h2>Perfil de Empleado</h2>
-
-  <div class="row">
-    <p><strong>ID:</strong> </p>
-    <button onclick="openReportPopup()">Generar informe</button>
-  </div>
-
-  <p><strong>Nombre:</strong> </p>
-  <p><strong>Apellidos:</strong> </p>
-  <p><strong>Horario:</strong> </p>
-</div>
-
-<style>
-  .profile-container .row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-  }
-  .profile-container .row p {
-      margin: 0;
-  }
-</style>
-
-  <h3>Entradas / Salidas (Esta semana)</h3>
-  <div class="worklog-table">
-    <table>
+    <table id="employee-table">
       <thead>
-      <tr>
-        <th>Hora Entrada </th>
-        <th>Hora Salida 1</th>
-        <th>Descanso Inicio</th>
-        <th>Descanso Fin</th>
-        <th>Hora Entrada 2</th>
-        <th>Hora Salida 2</th>
-      </tr>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Rol</th>
+        </tr>
       </thead>
-      <tbody>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-
+      <tbody id="employee-tbody">
+        <!-- Cargar los datos utilizando JavaScript -->
       </tbody>
     </table>
-  </div>
 
-  <h3>Resumen de Horas</h3>
-  <table class="report-table">
-    <thead>
-    <tr>
-      <th>Horas trabajadas</th>
-      <th>Horas de ausencia</th>
-      <th>Horas extra</th>
-      <th>Horas faltantes</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+    <!-- Cargar los datos del empleado utilizando JavaScript -->
+    <div class="profile-container" id="profile">
+      <p>Seleccione un empleado para ver su perfil.</p>
+    </div>
 
-<!-- Ventana para generar el informe -->
-<div class="overlay" id="overlay"></div>
-<div class="report-popup" id="reportPopup">
-  <h3>Generar Informe</h3>
-  <label><input type="checkbox" id="workedHours"> Horas trabajadas</label>
-  <label><input type="checkbox" id="absenceHours"> Horas de ausencia</label>
-  <label><input type="checkbox" id="overtimeHours"> Horas extra</label>
-  <label><input type="checkbox" id="missingHours"> Horas faltantes</label>
-  <button onclick="generateReport()">Generar Informe</button>
-  <button onclick="closeReportPopup()">Cancelar</button>
-</div>
+    <h3>Entradas / Salidas (Esta semana)</h3>
+    <div class="worklog-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha </th>
+            <th>Hora Entrada </th>
+            <th>Hora Salida 1</th>
+            <th>Descanso Inicio</th>
+            <th>Descanso Fin</th>
+            <th>Hora Entrada 2</th>
+            <th>Hora Salida 2</th>
+          </tr>
+        </thead>
+        <tbody id="worklog-tbody">
+          <!-- Cargar los datos utilizando JavaScript -->
+        </tbody>
+      </table>
+    </div>
 
-<script>
-  function openProfile(id) {
-      document.getElementById('profile').scrollIntoView({behavior: "smooth"});
-  }
+    <h3>Resumen de Horas</h3>
+    <table class="report-table">
+      <thead>
+        <tr>
+          <th>Horas trabajadas</th>
+          <th>Horas de ausencia</th>
+          <th>Horas extra</th>
+          <th>Horas faltantes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
 
-  function openReportPopup() {
-      document.getElementById('overlay').style.display = 'block';
-      document.getElementById('reportPopup').style.display = 'block';
-  }
+    <!-- Ventana para generar el informe -->
+    <div class="overlay" id="overlay"></div>
+    <div class="report-popup" id="reportPopup">
+      <h3>Generar Informe</h3>
+      <label><input type="checkbox" id="workedHours"> Horas trabajadas</label>
+      <label><input type="checkbox" id="absenceHours"> Horas de ausencia</label>
+      <label><input type="checkbox" id="overtimeHours"> Horas extra</label>
+      <label><input type="checkbox" id="missingHours"> Horas faltantes</label>
+      <button onclick="generateReport()">Generar Informe</button>
+      <button onclick="closeReportPopup()">Cancelar</button>
+    </div>
 
-  function closeReportPopup() {
-      document.getElementById('overlay').style.display = 'none';
-      document.getElementById('reportPopup').style.display = 'none';
-  }
-
-</script>
-
+    <script src="/js/script.js"></script>
+  </main>
 </body>
+
 </html>

@@ -13,9 +13,11 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeController {
     private final EmployeeService employeeService;
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
+        this.employeeRepository = employeeRepository;
     }
 
     // Crear un empleado
@@ -28,5 +30,10 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/{employee_id}")
+    public Employee getEmployeeById(@PathVariable("employee_id") Long employeeId) {
+        return employeeRepository.findByEmployeeId(employeeId).orElse(null);
     }
 }

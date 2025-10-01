@@ -88,7 +88,7 @@ public class Employee {
         return scheduleId;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.scheduleId = schedule;
+    public void setScheduleId(Schedule scheduleId) {
+        this.scheduleId = scheduleId;
     }
 }
