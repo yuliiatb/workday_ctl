@@ -1,7 +1,8 @@
 package org.example.entity;
 
 public enum LeaveType {
-            SICK,
-            VACATION,
-            UNPAID
+    BAJA_MEDICA,
+    VACACIONES,
+    PERSONAL_NO_PAGADO,
+    PERMISO_SE_RECUPERAN
 }

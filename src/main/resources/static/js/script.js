@@ -20,11 +20,13 @@ fetch('/employee')
       .then(response => response.json())
       .then(employee => {
         document.getElementById('profile').innerHTML = `       
-        <h2>Perfil de Empleado: ${employee.employeeRole}</h2>
+        <div class="profile-header" style="display: flex; align-items: center; justify-content: space-between;">
+          <h2>Perfil de Empleado: ${employee.employeeRole}</h2>
+          <button onclick="openReportPopup()">Generar informe</button>
+        </div>
 
         <div class="row">
           <p><strong>ID:</strong> ${employee.employeeId}</p>
-          <button onclick="openReportPopup()">Generar informe</button>
         </div>
 
         <p><strong>Nombre:</strong> ${employee.employeeFirstName}</p>

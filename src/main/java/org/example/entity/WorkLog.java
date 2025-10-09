@@ -49,12 +49,12 @@ public class WorkLog {
         this.workLogId = workLogId;
     }
 
-    public Employee getEmployeeId() {
+    public Employee getEmployee() {
         return employee;
     }
 
-    public void setEmployeeId(Employee employeeId) {
-        this.employee = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public LocalDate getWorkDate() {

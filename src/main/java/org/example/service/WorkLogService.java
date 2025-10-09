@@ -17,4 +17,5 @@ public class WorkLogService {
     public List<WorkLog> getAllWorkLogs() {
         return workLogRepository.findAll();
     }
+
 }

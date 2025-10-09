@@ -19,14 +19,18 @@ public class LeaveLog {
 
     @Column(name = "leave_date")
     private LocalDate leaveDate;
+    @Enumerated(EnumType.STRING)
     @Column(name = "leave_type")
     private LeaveType leaveType;
+    @Column(name = "leave_hours")
+    private Double leaveHours;
 
-    public LeaveLog(Long leaveLogId, Employee employee, LocalDate leaveDate, LeaveType leaveType) {
+    public LeaveLog(Long leaveLogId, Employee employee, LocalDate leaveDate, LeaveType leaveType, Double leaveHours) {
         this.leaveLogId = leaveLogId;
         this.employee = employee;
         this.leaveDate = leaveDate;
         this.leaveType = leaveType;
+        this.leaveHours = leaveHours;
     }
 
     public LeaveLog() {
@@ -40,11 +44,11 @@ public class LeaveLog {
         this.leaveLogId = leaveLogId;
     }
 
-    public Employee getEmployeeId() {
+    public Employee getEmployee() {
         return employee;
     }
 
-    public void setEmployeeId(Employee employee) {
+    public void setEmployee(Employee employee) {
         this.employee = employee;
     }
 
@@ -62,5 +66,13 @@ public class LeaveLog {
 
     public void setLeaveType(LeaveType leaveType) {
         this.leaveType = leaveType;
+    }
+
+    public Double getLeaveHours() {
+        return leaveHours;
+    }
+
+    public void setLeaveHours(Double leaveHours) {
+        this.leaveHours = leaveHours;
     }
 }

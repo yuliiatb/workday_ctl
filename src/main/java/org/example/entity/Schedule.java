@@ -18,14 +18,14 @@ public class Schedule {
     @Column(name = "break_duration")
     private Double breakDuration;
     @Column(name = "total_hours")
-    private Double totalHours;
+    private Double totalScheduleHours;
 
     public Schedule(Long scheduleId, LocalTime scheduleStartTime, LocalTime scheduleEndTime, Double breakDuration, Double totalHours) {
         this.scheduleId = scheduleId;
         this.scheduleStartTime = scheduleStartTime;
         this.scheduleEndTime = scheduleEndTime;
         this.breakDuration = breakDuration;
-        this.totalHours = totalHours;
+        this.totalScheduleHours = totalHours;
     }
 
     public Schedule() {
@@ -63,11 +63,11 @@ public class Schedule {
         this.breakDuration = breakDuration;
     }
 
-    public Double getTotalHours() {
-        return totalHours;
+    public Double getTotalScheduleHours() {
+        return totalScheduleHours;
     }
 
-    public void setTotalHours(Double totalHours) {
-        this.totalHours = totalHours;
+    public void setTotalScheduleHours(Double totalScheduleHours) {
+        this.totalScheduleHours = totalScheduleHours;
     }
 }
