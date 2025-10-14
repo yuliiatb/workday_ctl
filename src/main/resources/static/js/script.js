@@ -15,63 +15,97 @@ fetch('/employee')
       });
     });
 
-    function openProfile(id) {
-      fetch(`/employee/${id}`)
-      .then(response => response.json())
-      .then(employee => {
-        document.getElementById('profile').innerHTML = `       
-        <div class="profile-header" style="display: flex; align-items: center; justify-content: space-between;">
-          <h2>Perfil de Empleado: ${employee.employeeRole}</h2>
-          <button onclick="openReportPopup()">Generar informe</button>
-        </div>
+function openProfile(id) {
+  fetch(`/employee/${id}`)
+  .then(response => response.json())
+  .then(employee => {
+    document.getElementById('profile').innerHTML = `       
+    <div class="profile-header" style="display: flex; align-items: center; justify-content: space-between;">
+      <h2>Perfil de Empleado: ${employee.employeeRole}</h2>
+      <button onclick="openReportPopup()">Generar informe</button>
+    </div>
 
-        <div class="row">
-          <p><strong>ID:</strong> ${employee.employeeId}</p>
-        </div>
+    <div class="row">
+      <p><strong>ID:</strong> ${employee.employeeId}</p>
+    </div>
 
-        <p><strong>Nombre:</strong> ${employee.employeeFirstName}</p>
-        <p><strong>Apellidos:</strong> ${employee.employeeLastName}</p>
-        <p><strong>Horario:</strong> ${employee.scheduleId ? employee.scheduleId.scheduleId : "Horario no asignado"}</p>
-        `;
-        document.getElementById('profile').scrollIntoView({behavior: "smooth"});
-        
-        //Cargar los fichajes del empleado seleccionado
-        showWorkLogs(employee.employeeId);
-      });
-    }
+    <p><strong>Nombre:</strong> ${employee.employeeFirstName}</p>
+    <p><strong>Apellidos:</strong> ${employee.employeeLastName}</p>
+    <p><strong>Horario:</strong> ${employee.scheduleId ? employee.scheduleId.scheduleId : "Horario no asignado"}</p>
+    `;
+    document.getElementById('profile').scrollIntoView({behavior: "smooth"});
+    
+    //Cargar los datos sobre los fichajes y ausencias del empleado seleccionado.
+    showEmployeeWorkData(employee.employeeId);
+  });
+}
 
-    //Función para mostrar los fichajes del empleado seleccionado.
-    //El tiempo del inicio del descanso el la 1ª hora de salida, 
-    // y el tiempo del fin del descanso el la 2ª hora de entrada
-    function showWorkLogs(employee) {
-      fetch(`/work_log/${employee}`)
-      .then(response => response.json())
-      .then(workLogs => {
-        const tbody = document.getElementById('worklog-tbody');
-        tbody.innerHTML = "";
-        workLogs.forEach(workLog => {
+// Función para mostrar los fichajes y las ausencias del empleado seleccionado.
+async function showEmployeeWorkData(employeeId) {
+  try {
+    const response = await fetch(`/work_log/${employeeId}`);
+    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+    const workLogs = await response.json();
+    
+    // Obtener WorkLog de un emleado 
+    const worklogBody = document.getElementById('worklog-tbody');
+    worklogBody.innerHTML = "";
+
+    if (!Array.isArray(workLogs) || workLogs.length === 0) {
+      worklogBody.innerHTML = `<tr><td colspan="5">No hay fichajes disponibles</td></tr>`;
+    } else {
+      workLogs.forEach(log => {
         const row = `
-        <tr>
-            <td>${workLog.workDate ?? ''}</td>
-            <td>${workLog.logStartTime ?? ''}</td>
-            <td>${workLog.breakStart ?? ''}</td> 
-            <td>${workLog.breakStart ?? ''}</td>
-            <td>${workLog.breakEnd ?? ''}</td>
-            <td>${workLog.breakEnd ?? ''}</td> 
-            <td>${workLog.logEndTime ?? ''}</td>
+          <tr>
+            <td>${log.date ?? 'No se han registrado fichajes'}</td>
+            <td>${log.logStartTime ?? '–'}</td>            
+            <td>${log.breakStart ?? '–'}</td>
+            <td>${log.breakEnd ?? '–'}</td>            
+            <td>${log.logEndTime ?? '–'}</td>
           </tr>
-        `; 
-        tbody.innerHTML += row;
-        }); 
+        `;
+        worklogBody.insertAdjacentHTML('beforeend', row);
       });
     }
-  
-    function openReportPopup() {
-        document.getElementById('overlay').style.display = 'block';
-        document.getElementById('reportPopup').style.display = 'block';
+
+    // Obtener LevaLog del mismo empleado
+    const reportBody = document.getElementById('report-tbody');
+    reportBody.innerHTML = "";
+
+    if (!Array.isArray(workLogs) || workLogs.length === 0) {
+      reportBody.innerHTML = `<tr><td colspan="6">No hay datos disponibles</td></tr>`;
+    } else {
+      workLogs.forEach(log => {
+        const row = `
+          <tr>
+            <td>${log.date ?? 'No se han registrado ausencias'}</td>
+            <td>${log.totalHours ?? '–'}</td>
+            <td>${log.absenceHours ?? '–'}</td>
+            <td>${log.leaveType ?? '–'}</td>
+            <td>${log.extraHours ?? '–'}</td>
+            <td>${log.hoursLeft ?? '–'}</td>
+          </tr>
+        `;
+        reportBody.insertAdjacentHTML('beforeend', row);
+      });
     }
-  
-    function closeReportPopup() {
-        document.getElementById('overlay').style.display = 'none';
-        document.getElementById('reportPopup').style.display = 'none';
-    }   
+
+  } catch (error) {
+    console.error("Error al cargar los datos del empleado: ", error);
+    document.getElementById('worklog-tbody').innerHTML =
+      `<tr><td colspan="5">Error al cargar fichajes</td></tr>`;
+    document.getElementById('report-tbody').innerHTML =
+      `<tr><td colspan="6">Error al cargar el informe de horas</td></tr>`;
+  }
+}
+
+function openReportPopup() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('reportPopup').style.display = 'block';
+}
+
+function closeReportPopup() {
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('reportPopup').style.display = 'none';
+}   

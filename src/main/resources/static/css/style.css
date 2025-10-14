@@ -130,6 +130,7 @@ table {
     border-collapse: collapse;
     margin-bottom: 30px;
     border-radius: 5px;
+    table-layout: fixed;
 }
 
 table, th, td {
@@ -139,6 +140,10 @@ table, th, td {
 th, td {
     padding: 8px;
     text-align: left;
+}
+
+th {
+    background-color: #FC9A64;
 }
 
 tr:hover {
@@ -158,25 +163,14 @@ tr:hover {
     margin-top: 0;
 }
 
-.worklog-table {
-    max-height: 200px;
-    overflow-y: scroll;
-    display: block;
-    border: 1px solid var(--italian-roast);
-    border-radius: 5px;
+.worklog-table, .report-table, table {
+    max-height: 300px;
+    overflow-y: auto;
 }
 
-.worklog-table table {
+.worklog-table, .report-table, table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 5px;
-    border: 1px solid var(--italian-roast);
-}
-
-.report-table {
-    margin-top: 20px;
-    border-radius: 5px;
-    border: 1px solid var(--italian-roast);
 }
 
 .report-popup {
